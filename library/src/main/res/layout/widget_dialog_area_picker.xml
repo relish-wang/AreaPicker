@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ 杭州智晗信息技术有限公司 版权所有.
+  ~ Copyright © 2020. Zhihan Co., Ltd. All Rights Reserved.
+  ~
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/souche_widget_rl_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/fcprompt_date_picker_tv_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="6dp"
+                android:text="确定"
+                android:textColor="#4CA6FF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/fcprompt_date_picker_tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="取消"
+                android:textColor="#1A1A1A"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/wheel_data_ll"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#f2f7fa"
+            android:orientation="horizontal">
+
+            <wang.relish.picker.SCWheelAreaPicker
+                android:id="@+id/wheel_area_picker"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
