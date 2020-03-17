@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import wang.relish.citypicker.SCAreaPicker
+import wang.relish.citypicker.AreaPicker
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,18 +17,16 @@ class MainActivity : AppCompatActivity() {
     private var code: String = ""
 
     fun show(view: View) {
-        SCAreaPicker(this)
+        AreaPicker(this)
             .withPickedArea(code)
-            .withAreaPickedListener(object : SCAreaPicker.OnAreaPickedListener {
+            .withLevel(AreaPicker.Level.CITY)
+            .withAreaPickedListener(object : AreaPicker.OnAreaPickedListener {
                 @SuppressLint("SetTextI18n")
-                override fun onAreaPicked(p: String, c: String, a: String, code: String) {
-                    tv.text = "$p $c $a"
+                override fun onAreaPicked(p: String, c: String?, a: String?, code: String) {
+                    tv.text = "$p ${c?:""} ${a?:""}"
                     this@MainActivity.apply {
                         this.code = code
                     }
-                }
-
-                override fun onAreaPickFailed() {
                 }
             })
             .show()

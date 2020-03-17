@@ -15,8 +15,15 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemSelectedListener {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+
+public class AreaPicker extends BaseDialog implements WheelPicker.OnItemSelectedListener {
 
 
     private TextView mTvCancel;
@@ -25,27 +32,27 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
     private String rightText = "确定";
     private int rightColor = Color.parseColor("#4CA6FF");
     private int rightSize = 16;
-    private String leftText = "";
+    private String leftText = "取消";
     private int leftColor = Color.parseColor("#1A1A1A");
     private int leftSize = 16;
 
 
     private RelativeLayout mRlRoot;
-    private SCWheelAreaPicker mPicker;
+    private WheelAreaPicker mPicker;
 
     private OnAreaPickedListener mOnAreaPickedListener;
 
-    public SCAreaPicker(Context context) {
+    public AreaPicker(Context context) {
         super(context);
     }
 
     @Override
     public View onCreateView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.widget_dialog_area_picker, null);
-        mRlRoot = (RelativeLayout) view.findViewById(R.id.souche_widget_rl_root);
+        mRlRoot = (RelativeLayout) view.findViewById(R.id.widget_rl_root);
         mTvCancel = (TextView) view.findViewById(R.id.fcprompt_date_picker_tv_cancel);
         mTvConfirm = (TextView) view.findViewById(R.id.fcprompt_date_picker_tv_confirm);
-        mPicker = (SCWheelAreaPicker) view.findViewById(R.id.wheel_area_picker);
+        mPicker = (WheelAreaPicker) view.findViewById(R.id.wheel_area_picker);
         return view;
     }
 
@@ -74,15 +81,14 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         mTvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (true) {
-                    dismiss();
-                    if (mOnAreaPickedListener != null) {
-                        mOnAreaPickedListener.onAreaPicked(mPicker.getProvince(), mPicker.getCity(), mPicker.getArea(), mPicker.getCode());
-                    }
-                } else {
-                    if (mOnAreaPickedListener != null) {
-                        mOnAreaPickedListener.onAreaPickFailed();
-                    }
+                dismiss();
+                if (mOnAreaPickedListener != null) {
+                    mOnAreaPickedListener.onAreaPicked(
+                            mPicker.getProvince(),
+                            mLevel == Level.PROVINCE ? null : mPicker.getCity(),
+                            mLevel == Level.PROVINCE || mLevel == Level.CITY ? null : mPicker.getArea(),
+                            mPicker.getCode()
+                    );
                 }
             }
         });
@@ -90,10 +96,11 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         if (!TextUtils.isEmpty(mPickedAreaCode)) {
             mPicker.setPickedArea(mPickedAreaCode);
         }
+        mPicker.setLevel(mLevel);
     }
 
     @Override
-    public void onItemSelected(SCWheelPicker picker, IPickerModel data, int position) {
+    public void onItemSelected(WheelPicker picker, IPickerModel data, int position) {
         // do nothing.
     }
 
@@ -107,7 +114,7 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         return new SlideBottomExit();
     }
 
-    public SCAreaPicker withLeftText(String text) {
+    public AreaPicker withLeftText(String text) {
         if (TextUtils.isEmpty(text)) {
             return this;
         }
@@ -115,7 +122,7 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         return this;
     }
 
-    public SCAreaPicker withLeftTextColor(String textColor) {
+    public AreaPicker withLeftTextColor(String textColor) {
         if (TextUtils.isEmpty(textColor)) {
             return this;
         }
@@ -123,7 +130,7 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         return this;
     }
 
-    public SCAreaPicker withLeftTextSize(String textSize) {
+    public AreaPicker withLeftTextSize(String textSize) {
         if (TextUtils.isEmpty(textSize)) {
             return this;
         }
@@ -131,7 +138,7 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         return this;
     }
 
-    public SCAreaPicker withRightText(String text) {
+    public AreaPicker withRightText(String text) {
         if (TextUtils.isEmpty(text)) {
             return this;
         }
@@ -139,7 +146,7 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         return this;
     }
 
-    public SCAreaPicker withRightTextColor(String textColor) {
+    public AreaPicker withRightTextColor(String textColor) {
         if (TextUtils.isEmpty(textColor)) {
             return this;
         }
@@ -147,7 +154,7 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
         return this;
     }
 
-    public SCAreaPicker withRightTextSize(String textSize) {
+    public AreaPicker withRightTextSize(String textSize) {
         if (TextUtils.isEmpty(textSize)) {
             return this;
         }
@@ -157,7 +164,7 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
 
     private String mPickedAreaCode = "";
 
-    public SCAreaPicker withPickedArea(String areaCode) {
+    public AreaPicker withPickedArea(String areaCode) {
         //  已选择的城市
         mPickedAreaCode = areaCode;
         if (mPicker != null) {
@@ -167,16 +174,30 @@ public class SCAreaPicker extends SCCBaseDialog implements SCWheelPicker.OnItemS
     }
 
 
-    public SCAreaPicker withAreaPickedListener(OnAreaPickedListener listener) {
+    public AreaPicker withAreaPickedListener(OnAreaPickedListener listener) {
         mOnAreaPickedListener = listener;
+        return this;
+    }
+
+    @Level
+    private int mLevel = Level.AREA;
+
+    public AreaPicker withLevel(@Level int level) {
+        mLevel = level;
         return this;
     }
 
     public interface OnAreaPickedListener {
 
-        void onAreaPickFailed();
-
-        void onAreaPicked(String province, String city, String area, String code);
+        void onAreaPicked(@NonNull String province, @Nullable String city, @Nullable String area, @NonNull String code);
     }
 
+
+    @IntDef({Level.PROVINCE, Level.CITY, Level.AREA})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Level {
+        int PROVINCE = 1;
+        int CITY = 2;
+        int AREA = 3;
+    }
 }

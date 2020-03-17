@@ -15,9 +15,10 @@
 拷走library直接用。
 
 ```kotlin
- SCAreaPicker(this)
+ AreaPicker(this)
             .withPickedArea(code)
-            .withAreaPickedListener(object : SCAreaPicker.OnAreaPickedListener {
+            .withLevel(AreaPicker.Level.CITY)// 选择级别。默认三级(省市县)。
+            .withAreaPickedListener(object : AreaPicker.OnAreaPickedListener {
                 @SuppressLint("SetTextI18n")
                 override fun onAreaPicked(province: String, city: String, area: String, code: String) {
                    // province: 省份(省级)

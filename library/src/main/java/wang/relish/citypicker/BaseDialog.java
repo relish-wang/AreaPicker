@@ -20,8 +20,8 @@ import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 
 
-public abstract class SCCBaseDialog extends Dialog {
-    private String TAG = SCCBaseDialog.class.getSimpleName();
+public abstract class BaseDialog extends Dialog {
+    private String TAG = BaseDialog.class.getSimpleName();
     protected Context mContext;
     private boolean mCancel = false;
     private BaseAnimatorSet mShowAnim;
@@ -33,7 +33,7 @@ public abstract class SCCBaseDialog extends Dialog {
     private long mAutoDismissDelay = 1500;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public SCCBaseDialog(Context context) {
+    public BaseDialog(Context context) {
         super(context, R.style.fcprompt_dialog);
         mContext = context;
         setCanceledOnTouchOutside(true);
@@ -217,7 +217,7 @@ public abstract class SCCBaseDialog extends Dialog {
     /**
      * set window dim or not(设置背景是否昏暗)
      */
-    public SCCBaseDialog dimEnabled(boolean isDimEnabled) {
+    public BaseDialog dimEnabled(boolean isDimEnabled) {
         if (isDimEnabled) {
             getWindow().addFlags(LayoutParams.FLAG_DIM_BEHIND);
         } else {
@@ -237,7 +237,7 @@ public abstract class SCCBaseDialog extends Dialog {
     /**
      * automatic dimiss dialog after given delay(在给定时间后,自动消失)
      */
-    public SCCBaseDialog autoDismiss(boolean autoDismiss) {
+    public BaseDialog autoDismiss(boolean autoDismiss) {
         mAutoDismiss = autoDismiss;
         return this;
     }
@@ -245,7 +245,7 @@ public abstract class SCCBaseDialog extends Dialog {
     /**
      * set dealy (milliseconds) to dimiss dialog(对话框消失延时时间,毫秒值)
      */
-    public SCCBaseDialog autoDismissDelay(long autoDismissDelay) {
+    public BaseDialog autoDismissDelay(long autoDismissDelay) {
         mAutoDismissDelay = autoDismissDelay;
         return this;
     }

@@ -5,7 +5,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/souche_widget_rl_root"
+    android:id="@+id/widget_rl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
@@ -50,7 +50,7 @@
             android:background="#f2f7fa"
             android:orientation="horizontal">
 
-            <wang.relish.picker.SCWheelAreaPicker
+            <wang.relish.citypicker.WheelAreaPicker
                 android:id="@+id/wheel_area_picker"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -23,7 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SCWheelAreaPicker extends LinearLayout implements IWheelAreaPicker {
+public class WheelAreaPicker extends LinearLayout implements IWheelAreaPicker {
     private static final float ITEM_TEXT_SIZE = 18;
     private static final String SELECTED_ITEM_COLOR = "#353535";
     private static final int PROVINCE_INITIAL_INDEX = 0;
@@ -38,9 +39,9 @@ public class SCWheelAreaPicker extends LinearLayout implements IWheelAreaPicker 
 
     private LayoutParams mLayoutParams;
 
-    private SCWheelPicker mWPProvince, mWPCity, mWPArea;
+    private WheelPicker mWPProvince, mWPCity, mWPArea;
 
-    public SCWheelAreaPicker(Context context, AttributeSet attrs) {
+    public WheelAreaPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         initLayoutParams();
@@ -114,16 +115,16 @@ public class SCWheelAreaPicker extends LinearLayout implements IWheelAreaPicker 
         mProvinceName = new ArrayList<>();
         mCityName = new ArrayList<>();
 
-        mWPProvince = new SCWheelPicker(context);
-        mWPCity = new SCWheelPicker(context);
-        mWPArea = new SCWheelPicker(context);
+        mWPProvince = new WheelPicker(context);
+        mWPCity = new WheelPicker(context);
+        mWPArea = new WheelPicker(context);
 
         initWheelPicker(mWPProvince, 1);
         initWheelPicker(mWPCity, 1.5f);
         initWheelPicker(mWPArea, 1.5f);
     }
 
-    private void initWheelPicker(SCWheelPicker SCWheelPicker, float weight) {
+    private void initWheelPicker(WheelPicker SCWheelPicker, float weight) {
         mLayoutParams.weight = weight;
         SCWheelPicker.setItemTextSize(dip2px(mContext, ITEM_TEXT_SIZE));
         SCWheelPicker.setSelectedItemTextColor(Color.parseColor(SELECTED_ITEM_COLOR));
@@ -145,18 +146,18 @@ public class SCWheelAreaPicker extends LinearLayout implements IWheelAreaPicker 
 
     private void addListenerToWheelPicker() {
         //监听省份的滑轮,根据省份的滑轮滑动的数据来设置市跟地区的滑轮数据
-        mWPProvince.setOnItemSelectedListener(new SCWheelPicker.OnItemSelectedListener() {
+        mWPProvince.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(SCWheelPicker picker, IPickerModel data, int position) {
+            public void onItemSelected(WheelPicker picker, IPickerModel data, int position) {
                 //获得该省所有城市的集合
                 mCityList = mProvinceList.get(position).getCity();
                 setCityAndAreaData(position);
             }
         });
 
-        mWPCity.setOnItemSelectedListener(new SCWheelPicker.OnItemSelectedListener() {
+        mWPCity.setOnItemSelectedListener(new WheelPicker.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(SCWheelPicker picker, IPickerModel data, int position) {
+            public void onItemSelected(WheelPicker picker, IPickerModel data, int position) {
                 //获取城市对应的城区的名字
                 mWPArea.setData(mCityList.get(position).getArea());
             }
@@ -243,6 +244,27 @@ public class SCWheelAreaPicker extends LinearLayout implements IWheelAreaPicker 
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setLevel(@AreaPicker.Level int level) {
+        switch (level) {
+            case AreaPicker.Level.PROVINCE:
+                if (mWPCity != null) {
+                    mWPCity.setVisibility(View.GONE);
+                }
+                if (mWPArea != null) {
+                    mWPArea.setVisibility(View.GONE);
+                }
+                break;
+            case AreaPicker.Level.CITY:
+                if (mWPArea != null) {
+                    mWPArea.setVisibility(View.GONE);
+                }
+                break;
+            case AreaPicker.Level.AREA: // 默认
+                // do nothing.
+                break;
         }
     }
 }

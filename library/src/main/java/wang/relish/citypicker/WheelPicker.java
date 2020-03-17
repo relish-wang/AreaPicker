@@ -31,7 +31,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SCWheelPicker extends View implements IDebug, IWheelPicker, Runnable {
+public class WheelPicker extends View implements IDebug, IWheelPicker, Runnable {
     /**
      * 滚动状态标识值
      *
@@ -47,7 +47,7 @@ public class SCWheelPicker extends View implements IDebug, IWheelPicker, Runnabl
      */
     public static final int ALIGN_CENTER = 0, ALIGN_LEFT = 1, ALIGN_RIGHT = 2;
 
-    private static final String TAG = SCWheelPicker.class.getSimpleName();
+    private static final String TAG = WheelPicker.class.getSimpleName();
 
     private final Handler mHandler = new Handler();
 
@@ -272,36 +272,36 @@ public class SCWheelPicker extends View implements IDebug, IWheelPicker, Runnabl
 
     private boolean isDebug;
 
-    public SCWheelPicker(Context context) {
+    public WheelPicker(Context context) {
         this(context, null);
     }
 
-    public SCWheelPicker(Context context, AttributeSet attrs) {
+    public WheelPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SCWheelPicker);
-        mItemTextSize = a.getDimensionPixelSize(R.styleable.SCWheelPicker_wheel_item_text_size,
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WheelPicker);
+        mItemTextSize = a.getDimensionPixelSize(R.styleable.WheelPicker_wheel_item_text_size,
                 getResources().getDimensionPixelSize(R.dimen.WheelItemTextSize));
-        mVisibleItemCount = a.getInt(R.styleable.SCWheelPicker_wheel_visible_item_count, 7);
-        mSelectedItemPosition = a.getInt(R.styleable.SCWheelPicker_wheel_selected_item_position, 0);
-        hasSameWidth = a.getBoolean(R.styleable.SCWheelPicker_wheel_same_width, false);
+        mVisibleItemCount = a.getInt(R.styleable.WheelPicker_wheel_visible_item_count, 7);
+        mSelectedItemPosition = a.getInt(R.styleable.WheelPicker_wheel_selected_item_position, 0);
+        hasSameWidth = a.getBoolean(R.styleable.WheelPicker_wheel_same_width, false);
         mTextMaxWidthPosition =
-                a.getInt(R.styleable.SCWheelPicker_wheel_maximum_width_text_position, -1);
-        mMaxWidthText = a.getString(R.styleable.SCWheelPicker_wheel_maximum_width_text);
+                a.getInt(R.styleable.WheelPicker_wheel_maximum_width_text_position, -1);
+        mMaxWidthText = a.getString(R.styleable.WheelPicker_wheel_maximum_width_text);
         mSelectedItemTextColor = a.getColor
-                (R.styleable.SCWheelPicker_wheel_selected_item_text_color, ContextCompat.getColor(context, R.color.color_66));
-        mItemTextColor = a.getColor(R.styleable.SCWheelPicker_wheel_item_text_color, 0xFF888888);
-        mItemSpace = a.getDimensionPixelSize(R.styleable.SCWheelPicker_wheel_item_space,
+                (R.styleable.WheelPicker_wheel_selected_item_text_color, ContextCompat.getColor(context, R.color.color_66));
+        mItemTextColor = a.getColor(R.styleable.WheelPicker_wheel_item_text_color, 0xFF888888);
+        mItemSpace = a.getDimensionPixelSize(R.styleable.WheelPicker_wheel_item_space,
                 getResources().getDimensionPixelSize(R.dimen.WheelItemSpace));
-        isCyclic = a.getBoolean(R.styleable.SCWheelPicker_wheel_cyclic, false);
-        hasIndicator = a.getBoolean(R.styleable.SCWheelPicker_wheel_indicator, false);
-        mIndicatorColor = a.getColor(R.styleable.SCWheelPicker_wheel_indicator_color, 0xFFEE3333);
-        mIndicatorSize = a.getDimensionPixelSize(R.styleable.SCWheelPicker_wheel_indicator_size,
+        isCyclic = a.getBoolean(R.styleable.WheelPicker_wheel_cyclic, false);
+        hasIndicator = a.getBoolean(R.styleable.WheelPicker_wheel_indicator, false);
+        mIndicatorColor = a.getColor(R.styleable.WheelPicker_wheel_indicator_color, 0xFFEE3333);
+        mIndicatorSize = a.getDimensionPixelSize(R.styleable.WheelPicker_wheel_indicator_size,
                 getResources().getDimensionPixelSize(R.dimen.WheelIndicatorSize));
-        hasCurtain = a.getBoolean(R.styleable.SCWheelPicker_wheel_curtain, false);
-        mCurtainColor = a.getColor(R.styleable.SCWheelPicker_wheel_curtain_color, 0x88FFFFFF);
-        hasAtmospheric = a.getBoolean(R.styleable.SCWheelPicker_wheel_atmospheric, false);
-        isCurved = a.getBoolean(R.styleable.SCWheelPicker_wheel_curved, false);
+        hasCurtain = a.getBoolean(R.styleable.WheelPicker_wheel_curtain, false);
+        mCurtainColor = a.getColor(R.styleable.WheelPicker_wheel_curtain_color, 0x88FFFFFF);
+        hasAtmospheric = a.getBoolean(R.styleable.WheelPicker_wheel_atmospheric, false);
+        isCurved = a.getBoolean(R.styleable.WheelPicker_wheel_curved, false);
 //        mItemAlign = a.getInt(R.styleable.SCWheelPicker_wheel_item_align, ALIGN_CENTER);
         a.recycle();
 
@@ -1093,7 +1093,7 @@ public class SCWheelPicker extends View implements IDebug, IWheelPicker, Runnabl
          * @param data     当前选中的数据
          * @param position 当前选中的数据在数据列表中的位置
          */
-        void onItemSelected(SCWheelPicker picker, IPickerModel data, int position);
+        void onItemSelected(WheelPicker picker, IPickerModel data, int position);
     }
 
     /**
@@ -1145,19 +1145,19 @@ public class SCWheelPicker extends View implements IDebug, IWheelPicker, Runnabl
          * be called when they switch
          *
          * @param state 滚轮选择器滚动状态，其值仅可能为下列之一
-         *              {@link SCWheelPicker#SCROLL_STATE_IDLE}
+         *              {@link WheelPicker#SCROLL_STATE_IDLE}
          *              表示滚动选择器处于静止状态
-         *              {@link SCWheelPicker#SCROLL_STATE_DRAGGING}
+         *              {@link WheelPicker#SCROLL_STATE_DRAGGING}
          *              表示滚动选择器处于拖动状态
-         *              {@link SCWheelPicker#SCROLL_STATE_SCROLLING}
+         *              {@link WheelPicker#SCROLL_STATE_SCROLLING}
          *              表示滚动选择器处于滑动状态
          *              <p>
          *              State of WheelPicker, only one of the following
-         *              {@link SCWheelPicker#SCROLL_STATE_IDLE}
+         *              {@link WheelPicker#SCROLL_STATE_IDLE}
          *              Express WheelPicker in state of idle
-         *              {@link SCWheelPicker#SCROLL_STATE_DRAGGING}
+         *              {@link WheelPicker#SCROLL_STATE_DRAGGING}
          *              Express WheelPicker in state of dragging
-         *              {@link SCWheelPicker#SCROLL_STATE_SCROLLING}
+         *              {@link WheelPicker#SCROLL_STATE_SCROLLING}
          *              Express WheelPicker in state of scrolling
          */
         void onWheelScrollStateChanged(int state);
